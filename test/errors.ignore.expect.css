@@ -1,0 +1,23 @@
+test-does-not-extend-non-existent-selector {
+	@extend some-non-existent-selector;
+}
+
+test-does-not-extend-itself {
+
+	@extend test-does-not-extend-itself
+}
+
+test-does-not-extend-itself-cleverly-1 {
+
+	@extend test-does-not-extend-itself-cleverly-1
+}
+
+test-does-not-extend-itself-cleverly-2 {
+
+	@extend test-does-not-extend-itself-cleverly-1
+}
+
+%test-placeholder {
+
+	@extend %test-placeholder
+}

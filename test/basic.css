@@ -1,0 +1,14 @@
+.modal {
+	border: thick dotted red;
+	color: red;
+}
+
+.modal:hover {
+	outline: none;
+}
+
+.serious-modal {
+	@extend .modal;
+
+	font-weight: bold;
+}

@@ -1,0 +1,24 @@
+%thick-border {
+	border: thick dotted red;
+}
+
+.serious-modal {
+	font-style: normal;
+	font-weight: bold;
+
+	@media (max-width: 240px) {
+		@extend .modal:hover;
+	}
+}
+
+.modal {
+	@extend %thick-border;
+
+	color: red;
+
+	&:hover {
+		&:not(:focus) {
+			outline: none;
+		}
+	}
+}
