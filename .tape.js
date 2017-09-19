@@ -13,8 +13,15 @@ module.exports = {
 		'nested-media': {
 			'message': 'supports nested @media usage'
 		},
-		'nested-media:nesting': {
-			'message': 'supports nested @media usage (with postcss-nesting)',
+		'nested-media:nesting-first': {
+			'message': 'supports nested @media usage (with postcss-nesting running second)',
+			plugin: () => require('postcss')(
+				require('postcss-nesting'),
+				require('.')
+			)
+		},
+		'nested-media:nesting-second': {
+			'message': 'supports nested @media usage (with postcss-nesting running second)',
 			plugin: () => require('postcss')(
 				require('.'),
 				require('postcss-nesting')
