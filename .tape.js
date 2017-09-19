@@ -10,6 +10,16 @@ module.exports = {
 				require('.')
 			)
 		},
+		'nested-media': {
+			'message': 'supports nested @media usage'
+		},
+		'nested-media:nesting': {
+			'message': 'supports nested @media usage (with postcss-nesting)',
+			plugin: () => require('postcss')(
+				require('.'),
+				require('postcss-nesting')
+			)
+		},
 		'errors': {
 			message: 'manages error-ridden usage'
 		},
