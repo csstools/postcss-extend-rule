@@ -96,7 +96,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 		// matching rule’s cloned nodes
 		const nestingNodes = matchingRule.clone().nodes;
 
-		let parent = matchingRule.parent;
+		// clone the matching rule as a nested rule
 		let clone = extendAtRule.clone({
 			name: 'nest',
 			params: nestingSelectors,
@@ -105,6 +105,9 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 			raws: {}
 		});
 
+		// preserve nesting of parent rules and at-rules
+		let parent = matchingRule.parent;
+
 		while (parent && (parent.type === 'rule' || parent.type === 'atrule')) {
 			clone = parent.clone().removeAll().append([ clone ]);
 
@@ -112,9 +115,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 		}
 
 		// push the matching rule to the extending rules
-		extendingRules.push(
-			clone
-		);
+		extendingRules.push(clone);
 	});
 
 	// return the extending rules
