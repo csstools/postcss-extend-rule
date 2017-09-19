@@ -1,3 +1,5 @@
+'use strict';
+
 // external tooling
 const postcss   = require('postcss');
 const transform = require('postcss-nesting/lib/transform');
