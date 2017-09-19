@@ -1,0 +1,17 @@
+{
+  "name": "postcss-extend-rule-codepen",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "browserify codepen.js | babel --presets=env | uglifyjs --compress --mangle > codepen.bundle.js"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "browserify": "^14.4.0",
+    "postcss": "^6.0.11",
+    "postcss-extend-rule": "github:jonathantneal/postcss-extend-rule",
+    "postcss-nesting": "github:jonathantneal/postcss-nesting",
+    "uglify-js": "^3.1.1"
+  },
+  "private": true
+}
