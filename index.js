@@ -1,6 +1,6 @@
 // external tooling
-const postcss                = require('postcss');
-const transformNestingAtRule = require('postcss-nesting/lib/transform-nesting-atrule');
+const postcss   = require('postcss');
+const transform = require('postcss-nesting/lib/transform');
 
 // extend at-rule match
 const extendMatch = /^(extend)$/i;
@@ -31,8 +31,14 @@ module.exports = postcss.plugin('postcss-extend-rule', (rawopts) => {
 					// replace the extend at-rule with the extending rules
 					extendAtRule.replaceWith(extendingRules);
 
-					// transform these nesting at-rules
-					extendingRules.forEach(transformNestingAtRule);
+					// transform any nesting at-rules
+					extendingRules.forEach(
+						(extendingRule) => {
+							transform(extendingRule);
+
+							extendingRule.walk(transform);
+						}
+					);
 				} else {
 					// manage unused extend at-rules
 					const unusedExtendMessage = `Unused extend at-rule "${extendAtRule.params}"`;
@@ -90,15 +96,24 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 		// matching rule’s cloned nodes
 		const nestingNodes = matchingRule.clone().nodes;
 
+		let parent = matchingRule.parent;
+		let clone = extendAtRule.clone({
+			name: 'nest',
+			params: nestingSelectors,
+			nodes: nestingNodes,
+			// empty the extending rules, as they are likely non-comforming
+			raws: {}
+		});
+
+		while (parent && (parent.type === 'rule' || parent.type === 'atrule')) {
+			clone = parent.clone().removeAll().append([ clone ]);
+
+			parent = parent.parent;
+		}
+
 		// push the matching rule to the extending rules
 		extendingRules.push(
-			extendAtRule.clone({
-				name: 'nest',
-				params: nestingSelectors,
-				nodes: nestingNodes,
-				// empty the extending rules, as they are likely non-comforming
-				raws: {}
-			})
+			clone
 		);
 	});
 

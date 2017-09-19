@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "postcss": "^6.0.11",
-    "postcss-nesting": "^4.2.0"
+    "postcss-nesting": "^4.2.1"
   },
   "devDependencies": {
     "eslint": "^4.7.1",
