@@ -2,7 +2,6 @@
 
 [![NPM Version][npm-img]][npm-url]
 [![Build Status][cli-img]][cli-url]
-[![Windows Build Status][win-img]][win-url]
 [![Support Chat][git-img]][git-url]
 
 [PostCSS Extend Rule] lets you use the `@extend` at-rule and
@@ -193,6 +192,12 @@ postcssExtend({ name: 'postcss-extend' })
 If the `name` option were changed to, say, `postcss-extend`, then only
 `@postcss-extend` at-rules would be parsed.
 
+```pcss
+main {
+  @postcss-extend .some-rule;
+}
+```
+
 ### onFunctionalSelector
 
 The `onFunctionalSelector` option determines how functional selectors should be
@@ -227,7 +232,7 @@ postcssExtend({ onRecursiveExtend: 'remove' /* default */ })
 
 ```pcss
 .this-will-not-extend-itself {
-	@extend .this-will-not-extend-itself;
+  @extend .this-will-not-extend-itself;
 }
 ```
 
@@ -257,8 +262,6 @@ main {
 [git-url]: https://gitter.im/postcss/postcss
 [npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
 [npm-url]: https://www.npmjs.com/package/postcss-extend-rule
-[win-img]: https://img.shields.io/appveyor/ci/jonathantneal/postcss-extend-rule.svg
-[win-url]: https://ci.appveyor.com/project/jonathantneal/postcss-extend-rule
 
 [CSS Extend Rules Specification]: https://jonathantneal.github.io/specs/css-extend-rule/
 [Functional Selectors]: https://jonathantneal.github.io/specs/css-extend-rule/#functional-selector
