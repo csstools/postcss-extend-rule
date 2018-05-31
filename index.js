@@ -1,8 +1,5 @@
-'use strict';
-
-// external tooling
-const postcss   = require('postcss');
-const transform = require('postcss-nesting/lib/transform');
+import postcss from 'postcss';
+import nesting from 'postcss-nesting';
 
 // extend at-rule match
 const extendMatch = /^(extend)$/i;
@@ -11,13 +8,13 @@ const extendMatch = /^(extend)$/i;
 const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)/i;
 
 // plugin
-module.exports = postcss.plugin('postcss-extend-rule', (rawopts) => {
+export default postcss.plugin('postcss-extend-rule', rawopts => {
 	// options ( onFunctionalSelector, onRecursiveExtend, onUnusedExtend)
 	const opts = Object(rawopts);
 
 	return (root, result) => {
 		// for each extend at-rule
-		root.walkAtRules(extendMatch, (extendAtRule) => {
+		root.walkAtRules(extendMatch, extendAtRule => {
 			// do not revisit visited extend at-rules
 			if (!extendAtRule.__extendAtRuleVisited) {
 				extendAtRule.__extendAtRuleVisited = true;
@@ -35,7 +32,7 @@ module.exports = postcss.plugin('postcss-extend-rule', (rawopts) => {
 
 					// transform any nesting at-rules
 					extendingRules.forEach(
-						(extendingRule) => {
+						extendingRule => {
 							transform(extendingRule);
 
 							extendingRule.walk(transform);
@@ -67,7 +64,7 @@ module.exports = postcss.plugin('postcss-extend-rule', (rawopts) => {
 			}
 		});
 
-		root.walkRules(functionalSelectorMatch, (functionalRule) => {
+		root.walkRules(functionalSelectorMatch, functionalRule => {
 			// manage encountered functional selectors
 			const functionalSelectorMessage = `Encountered functional selector "${functionalRule.selector}"`;
 
@@ -82,17 +79,25 @@ module.exports = postcss.plugin('postcss-extend-rule', (rawopts) => {
 	};
 });
 
+function transform(node) {
+	return nesting()({
+		walk(transformer) {
+			return transformer(node)
+		}
+	});
+}
+
 function getExtendingRules(selectorIdMatch, extendAtRule) {
 	// extending rules
 	const extendingRules = [];
 
 	// for each rule found from root of the extend at-rule with a matching selector identifier
-	extendAtRule.root().walkRules(selectorIdMatch, (matchingRule) => {
+	extendAtRule.root().walkRules(selectorIdMatch, matchingRule => {
 		// nesting selectors for the selectors matching the selector identifier
 		const nestingSelectors = matchingRule.selectors.filter(
-			(selector) => selectorIdMatch.test(selector)
+			selector => selectorIdMatch.test(selector)
 		).map(
-			(selector) => selector.replace(selectorIdMatch, '$1&$3')
+			selector => selector.replace(selectorIdMatch, '$1&$3')
 		).join(',');
 
 		// matching rule’s cloned nodes
@@ -127,7 +132,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 function getSelectorIdMatch(selectorIds) {
 	// escape the contents of the selector id to avoid being parsed as regex
 	const escapedSelectorIds = postcss.list.comma(selectorIds).map(
-		(selectorId) => selectorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+		selectorId => selectorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 	).join('|');
 
 	// selector unattached to an existing selector
