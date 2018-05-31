@@ -2,13 +2,14 @@
 
 [![NPM Version][npm-img]][npm-url]
 [![Build Status][cli-img]][cli-url]
-[![Gitter Chat][git-img]][git-url]
+[![Windows Build Status][win-img]][win-url]
+[![Support Chat][git-img]][git-url]
 
 [PostCSS Extend Rule] lets you use the `@extend` at-rule and
 [Functional Selectors] in CSS, following the speculative
 [CSS Extend Rules Specification].
 
-```css
+```pcss
 %thick-border {
   border: thick dotted red;
 }
@@ -68,7 +69,9 @@ npm install postcss-extend-rule --save-dev
 Use [PostCSS Extend Rule] to process your CSS:
 
 ```js
-require('postcss-extend-rule').process(YOUR_CSS /*, PostCSS Options, Options */);
+import postcssExtend from 'postcss-extend-rule';
+
+postcssExtend.process(YOUR_CSS, /* processOptions */ /*, pluginOptions */);
 ```
 
 #### PostCSS
@@ -82,9 +85,46 @@ npm install postcss --save-dev
 Use [PostCSS Extend Rule] as a plugin:
 
 ```js
+import postcss from 'gulp-postcss';
+import postcssExtend from 'postcss-extend-rule';
+
 postcss([
-  require('postcss-extend-rule')(/* Options */)
+  postcssExtend(/* pluginOptions */)
 ]).process(YOUR_CSS);
+```
+
+#### Webpack
+
+Add [PostCSS Loader] to your build tool:
+
+```bash
+npm install postcss-loader --save-dev
+```
+
+Use [PostCSS Extend Rule] in your Webpack configuration:
+
+```js
+import postcssExtend from 'postcss-extend-rule';
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { importLoaders: 1 } },
+          { loader: 'postcss-loader', options: {
+            ident: 'postcss',
+            plugins: () => [
+              postcssExtend(/* pluginOptions */)
+            ]
+          } }
+        ]
+      }
+    ]
+  }
+}
 ```
 
 #### Gulp
@@ -98,17 +138,16 @@ npm install gulp-postcss --save-dev
 Use [PostCSS Extend Rule] in your Gulpfile:
 
 ```js
-var postcss = require('gulp-postcss');
+import postcss from 'gulp-postcss';
+import postcssExtend from 'postcss-extend-rule';
 
-gulp.task('css', function () {
-  return gulp.src('./src/*.css').pipe(
-    postcss([
-      require('postcss-extend-rule')(/* Options */)
-    ])
-  ).pipe(
-    gulp.dest('.')
-  );
-});
+gulp.task('css', () => gulp.src('./src/*.css').pipe(
+  postcss([
+    postcssExtend(/* pluginOptions */)
+  ])
+).pipe(
+  gulp.dest('.')
+));
 ```
 
 #### Grunt
@@ -122,13 +161,15 @@ npm install grunt-postcss --save-dev
 Use [PostCSS Extend Rule] in your Gruntfile:
 
 ```js
+import postcssExtend from 'postcss-extend-rule';
+
 grunt.loadNpmTasks('grunt-postcss');
 
 grunt.initConfig({
   postcss: {
     options: {
       use: [
-        require('postcss-extend-rule')(/* Options */)
+       postcssExtend(/* pluginOptions */)
       ]
     },
     dist: {
@@ -140,6 +181,18 @@ grunt.initConfig({
 
 ## Options
 
+### name
+
+The `name` option determines the at-rule name being used to extend selectors.
+By default, this name is `extend`, meaning `@extend` rules are parsed.
+
+```js
+postcssExtend({ name: 'postcss-extend' })
+```
+
+If the `name` option were changed to, say, `postcss-extend`, then only
+`@postcss-extend` at-rules would be parsed.
+
 ### onFunctionalSelector
 
 The `onFunctionalSelector` option determines how functional selectors should be
@@ -149,6 +202,14 @@ handled. Its options are:
 - `ignore` ignores any functional selector and moves on
 - `warn` warns the user whenever it encounters a functional selector
 - `throw` throws an error if ever it encounters a functional selector
+
+```js
+postcssExtend({ onFunctionalSelector: 'remove' /* default */ })
+```
+
+```pcss
+%this-will-be-removed {}
+```
 
 ### onRecursiveExtend
 
@@ -160,6 +221,16 @@ be handled. Its options are:
 - `warn` warns the user whenever it encounters a recursive extend at-rules
 - `throw` throws an error if ever it encounters a recursive extend at-rules
 
+```js
+postcssExtend({ onRecursiveExtend: 'remove' /* default */ })
+```
+
+```pcss
+.this-will-not-extend-itself {
+	@extend .this-will-not-extend-itself;
+}
+```
+
 ### onUnusedExtend
 
 The `onUnusedExtend` option determines how an unused extend at-rule should be
@@ -170,16 +241,29 @@ handled. Its options are:
 - `warn` warns the user whenever it encounters an unused extend at-rule
 - `throw` throws an error if ever it encounters an unused extend at-rule
 
-[npm-url]: https://www.npmjs.com/package/postcss-extend-rule
-[npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
-[cli-url]: https://travis-ci.org/jonathantneal/postcss-extend-rule
+```js
+postcssExtend({ onUnusedExtend: 'remove' /* default */ })
+```
+
+```pcss
+main {
+  @extend .this-selector-does-not-exist-and-will-be-removed;
+}
+```
+
 [cli-img]: https://img.shields.io/travis/jonathantneal/postcss-extend-rule.svg
+[cli-url]: https://travis-ci.org/jonathantneal/postcss-extend-rule
+[git-img]: https://img.shields.io/badge/support-chat-blue.svg
 [git-url]: https://gitter.im/postcss/postcss
-[git-img]: https://img.shields.io/badge/chat-gitter-blue.svg
+[npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
+[npm-url]: https://www.npmjs.com/package/postcss-extend-rule
+[win-img]: https://img.shields.io/appveyor/ci/jonathantneal/postcss-extend-rule.svg
+[win-url]: https://ci.appveyor.com/project/jonathantneal/postcss-extend-rule
 
 [CSS Extend Rules Specification]: https://jonathantneal.github.io/specs/css-extend-rule/
 [Functional Selectors]: https://jonathantneal.github.io/specs/css-extend-rule/#functional-selector
 [Gulp PostCSS]: https://github.com/postcss/gulp-postcss
 [Grunt PostCSS]: https://github.com/nDmitry/grunt-postcss
 [PostCSS]: https://github.com/postcss/postcss
+[PostCSS Loader]: https://github.com/postcss/postcss-loader
 [PostCSS Extend Rule]: https://github.com/jonathantneal/postcss-extend-rule

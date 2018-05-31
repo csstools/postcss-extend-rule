@@ -1,10 +1,24 @@
 module.exports = {
 	'postcss-extend-rule': {
 		'basic': {
-			message: 'supports basic usage'
+			message: 'supports @extend usage'
+		},
+		'basic:name': {
+			message: 'ignores @extend usage when { name: "postcss-extend" }',
+			options: {
+				name: 'postcss-extend'
+			},
+			expect: 'basic.css'
+		},
+		'basic-postcss-name': {
+			message: 'supports @postcss-extend when { name: "postcss-extend" }',
+			options: {
+				name: 'postcss-extend'
+			},
+			expect: 'basic.expect.css'
 		},
 		'advanced': {
-			message: 'supports advanced usage (with postcss-nesting)',
+			message: 'supports mixed usage (with postcss-nesting)',
 			plugin: () => require('postcss')(
 				require('postcss-nesting'),
 				require('.')
@@ -14,14 +28,14 @@ module.exports = {
 			'message': 'supports nested @media usage'
 		},
 		'nested-media:nesting-first': {
-			'message': 'supports nested @media usage (with postcss-nesting running first)',
+			'message': 'supports nested @media usage when postcss-nesting runs first',
 			plugin: () => require('postcss')(
 				require('postcss-nesting'),
 				require('.')
 			)
 		},
 		'nested-media:nesting-second': {
-			'message': 'supports nested @media usage (with postcss-nesting running second)',
+			'message': 'supports nested @medi usage when postcss-nesting runs second',
 			plugin: () => require('postcss')(
 				require('.'),
 				require('postcss-nesting')

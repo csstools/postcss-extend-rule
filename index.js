@@ -1,9 +1,6 @@
 import postcss from 'postcss';
 import nesting from 'postcss-nesting';
 
-// extend at-rule match
-const extendMatch = /^(extend)$/i;
-
 // functional selector match
 const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)/i;
 
@@ -11,6 +8,11 @@ const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)
 export default postcss.plugin('postcss-extend-rule', rawopts => {
 	// options ( onFunctionalSelector, onRecursiveExtend, onUnusedExtend)
 	const opts = Object(rawopts);
+	const extendMatch = opts.name instanceof RegExp
+		? opts.name
+	: 'name' in opts
+		? new RegExp(`^${opts.name}$`, 'i')
+	: 'extend';
 
 	return (root, result) => {
 		// for each extend at-rule
