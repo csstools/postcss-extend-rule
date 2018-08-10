@@ -1,0 +1,13 @@
+button {
+  color: red;
+}
+
+.button {
+  @extend button;
+  background: blue;
+}
+
+#button {
+  @extend button;
+  background: lime;
+}

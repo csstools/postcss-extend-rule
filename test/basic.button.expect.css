@@ -1,0 +1,13 @@
+button {
+  color: red;
+}
+
+.button {
+  color: red;
+  background: blue;
+}
+
+#button {
+  color: red;
+  background: lime;
+}
