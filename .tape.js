@@ -17,6 +17,10 @@ module.exports = {
 			},
 			expect: 'basic.expect.css'
 		},
+		'basic.button': {
+			message: 'supports @extend usage with same tag name and class name',
+			expect: 'basic.button.expect.css'
+		},
 		'advanced': {
 			message: 'supports mixed usage (with postcss-nesting)',
 			plugin: () => require('postcss')(

@@ -138,7 +138,7 @@ function getSelectorIdMatch(selectorIds) {
 	).join('|');
 
 	// selector unattached to an existing selector
-	const selectorIdMatch = new RegExp(`(^|[^\\w-])(${escapedSelectorIds})([^\\w-]|$)`, '');
+	const selectorIdMatch = new RegExp(`(^|[^\\w-]!\.!\#)(${escapedSelectorIds})([^\\w-]|$)`, '');
 
 	return selectorIdMatch;
 }
