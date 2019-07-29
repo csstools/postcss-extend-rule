@@ -1,13 +1,13 @@
 .my_placeholder {
-	color: red;
+	color: red
 }
 
 @media screen and (min-width: 920px) {
 
-	.my_placeholder {
-		color: green;
-	}
+.my_placeholder {
+		color: green
 }
+	}
 
 .test-content {
 	color: red;
@@ -17,5 +17,5 @@
 
 	.test-content {
 		color: green;
-	}
 }
+	}

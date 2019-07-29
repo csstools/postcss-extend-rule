@@ -1,4 +1,4 @@
-# PostCSS Extend Rule [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS Logo" width="90" height="90" align="right">][postcss]
+# PostCSS Extend Rule [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS" width="90" height="90" align="right">][postcss]
 
 [![NPM Version][npm-img]][npm-url]
 [![Build Status][cli-img]][cli-url]
@@ -57,126 +57,35 @@
 
 ## Usage
 
-Add [PostCSS Extend Rule] to your build tool:
+Add [PostCSS Extend Rule] to your project:
 
 ```bash
 npm install postcss-extend-rule --save-dev
 ```
 
-#### Node
-
-Use [PostCSS Extend Rule] to process your CSS:
+Use **PostCSS Extend Rule** to process your CSS:
 
 ```js
-import postcssExtend from 'postcss-extend-rule';
+const postcssExtendRule = require('postcss-extend-rule');
 
-postcssExtend.process(YOUR_CSS, /* processOptions */ /*, pluginOptions */);
+postcssExtendRule.process(YOUR_CSS /*, processOptions, pluginOptions */);
 ```
 
-#### PostCSS
-
-Add [PostCSS] to your build tool:
-
-```bash
-npm install postcss --save-dev
-```
-
-Use [PostCSS Extend Rule] as a plugin:
+Or use it as a [PostCSS] plugin:
 
 ```js
-import postcss from 'gulp-postcss';
-import postcssExtend from 'postcss-extend-rule';
+const postcss = require('postcss');
+const postcssExtendRule = require('postcss-extend-rule');
 
 postcss([
-  postcssExtend(/* pluginOptions */)
-]).process(YOUR_CSS);
+  postcssExtendRule(/* pluginOptions */)
+]).process(YOUR_CSS /*, processOptions */);
 ```
 
-#### Webpack
+**PostCSS Extend Rule** runs in all Node environments, with special instructions for:
 
-Add [PostCSS Loader] to your build tool:
-
-```bash
-npm install postcss-loader --save-dev
-```
-
-Use [PostCSS Extend Rule] in your Webpack configuration:
-
-```js
-import postcssExtend from 'postcss-extend-rule';
-
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          { loader: 'css-loader', options: { importLoaders: 1 } },
-          { loader: 'postcss-loader', options: {
-            ident: 'postcss',
-            plugins: () => [
-              postcssExtend(/* pluginOptions */)
-            ]
-          } }
-        ]
-      }
-    ]
-  }
-}
-```
-
-#### Gulp
-
-Add [Gulp PostCSS] to your build tool:
-
-```bash
-npm install gulp-postcss --save-dev
-```
-
-Use [PostCSS Extend Rule] in your Gulpfile:
-
-```js
-import postcss from 'gulp-postcss';
-import postcssExtend from 'postcss-extend-rule';
-
-gulp.task('css', () => gulp.src('./src/*.css').pipe(
-  postcss([
-    postcssExtend(/* pluginOptions */)
-  ])
-).pipe(
-  gulp.dest('.')
-));
-```
-
-#### Grunt
-
-Add [Grunt PostCSS] to your build tool:
-
-```bash
-npm install grunt-postcss --save-dev
-```
-
-Use [PostCSS Extend Rule] in your Gruntfile:
-
-```js
-import postcssExtend from 'postcss-extend-rule';
-
-grunt.loadNpmTasks('grunt-postcss');
-
-grunt.initConfig({
-  postcss: {
-    options: {
-      use: [
-       postcssExtend(/* pluginOptions */)
-      ]
-    },
-    dist: {
-      src: '*.css'
-    }
-  }
-});
-```
+| [Node](INSTALL.md#node) | [PostCSS CLI](INSTALL.md#postcss-cli) | [Webpack](INSTALL.md#webpack) | [Create React App](INSTALL.md#create-react-app) | [Gulp](INSTALL.md#gulp) | [Grunt](INSTALL.md#grunt) |
+| --- | --- | --- | --- | --- | --- |
 
 ## Options
 
@@ -256,8 +165,8 @@ main {
 }
 ```
 
-[cli-img]: https://img.shields.io/travis/jonathantneal/postcss-extend-rule.svg
-[cli-url]: https://travis-ci.org/jonathantneal/postcss-extend-rule
+[cli-img]: https://img.shields.io/travis/csstools/postcss-extend-rule/master.svg
+[cli-url]: https://travis-ci.org/csstools/postcss-extend-rule
 [git-img]: https://img.shields.io/badge/support-chat-blue.svg
 [git-url]: https://gitter.im/postcss/postcss
 [npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
@@ -265,8 +174,5 @@ main {
 
 [CSS Extend Rules Specification]: https://jonathantneal.github.io/specs/css-extend-rule/
 [Functional Selectors]: https://jonathantneal.github.io/specs/css-extend-rule/#functional-selector
-[Gulp PostCSS]: https://github.com/postcss/gulp-postcss
-[Grunt PostCSS]: https://github.com/nDmitry/grunt-postcss
 [PostCSS]: https://github.com/postcss/postcss
-[PostCSS Loader]: https://github.com/postcss/postcss-loader
-[PostCSS Extend Rule]: https://github.com/jonathantneal/postcss-extend-rule
+[PostCSS Extend Rule]: https://github.com/csstools/postcss-extend-rule

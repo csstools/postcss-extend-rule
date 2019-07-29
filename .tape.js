@@ -1,5 +1,8 @@
+const postcss = require('postcss');
+const postcssNesting = require('postcss-nesting');
+const postcssExtends = require('.');
+
 module.exports = {
-	'postcss-extend-rule': {
 		'basic': {
 			message: 'supports @extend usage'
 		},
@@ -23,32 +26,47 @@ module.exports = {
 		},
 		'advanced': {
 			message: 'supports mixed usage (with postcss-nesting)',
-			plugin: () => require('postcss')(
-				require('postcss-nesting'),
-				require('.')
-			)
+			plugin: postcss.plugin('postcss-extend-rule', () => {
+				const extendsTransformer = postcssExtends();
+				const nestingTransformer = postcssNesting();
+
+				return (...args) => {
+					nestingTransformer(...args);
+					extendsTransformer(...args);
+				};
+			})
 		},
 		'nested-media': {
 			'message': 'supports nested @media usage'
 		},
 		'nested-media:nesting-first': {
 			'message': 'supports nested @media usage when postcss-nesting runs first',
-			plugin: () => require('postcss')(
-				require('postcss-nesting'),
-				require('.')
-			)
+			plugin: postcss.plugin('postcss-extend-rule', () => {
+				const extendsTransformer = postcssExtends();
+				const nestingTransformer = postcssNesting();
+
+				return (...args) => {
+					nestingTransformer(...args);
+					extendsTransformer(...args);
+				};
+			})
 		},
 		'nested-media:nesting-second': {
 			'message': 'supports nested @medi usage when postcss-nesting runs second',
-			plugin: () => require('postcss')(
-				require('.'),
-				require('postcss-nesting')
-			)
+			plugin: postcss.plugin('postcss-extend-rule', () => {
+				const extendsTransformer = postcssExtends();
+				const nestingTransformer = postcssNesting();
+
+				return (...args) => {
+					extendsTransformer(...args);
+					nestingTransformer(...args);
+				};
+			})
 		},
-		'errors': {
+		'error': {
 			message: 'manages error-ridden usage'
 		},
-		'errors:ignore': {
+		'error:ignore': {
 			message: 'manages error-ridden usage with { onFunctionalSelector: "ignore", onRecursiveExtend: "ignore", onUnusedExtend: "ignore" } options',
 			options: {
 				onFunctionalSelector: 'ignore',
@@ -56,16 +74,16 @@ module.exports = {
 				onUnusedExtend: 'ignore'
 			}
 		},
-		'errors:warn': {
+		'error:warn': {
 			message: 'manages error-ridden usage with { onFunctionalSelector: "warn", onRecursiveExtend: "warn", onUnusedExtend: "warn" } options',
 			options: {
 				onFunctionalSelector: 'warn',
 				onRecursiveExtend: 'warn',
 				onUnusedExtend: 'warn'
 			},
-			warning: 6
+			warnings: 2
 		},
-		'errors:throw': {
+		'error:throw': {
 			message: 'manages error-ridden usage with { onFunctionalSelector: "throw", onRecursiveExtend: "throw", onUnusedExtend: "throw" } options',
 			options: {
 				onFunctionalSelector: 'throw',
@@ -76,7 +94,7 @@ module.exports = {
 				reason: 'Unused extend at-rule "some-non-existent-selector"'
 			}
 		},
-		'errors:throw-on-functional-selectors': {
+		'error:throw-on-functional-selectors': {
 			message: 'manages error-ridden usage with { onFunctionalSelector: "throw" } options',
 			options: {
 				onFunctionalSelector: 'throw'
@@ -85,5 +103,4 @@ module.exports = {
 				reason: 'Encountered functional selector "%test-placeholder"'
 			}
 		}
-	}
 };
