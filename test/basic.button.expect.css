@@ -4,10 +4,16 @@ button {
 
 .button {
   color: red;
+}
+
+.button {
   background: blue;
 }
 
 #button {
   color: red;
+}
+
+#button {
   background: lime;
 }

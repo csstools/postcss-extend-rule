@@ -1,5 +1,7 @@
 import postcss from 'postcss';
-import nesting from 'postcss-nesting';
+import postcssNesting from 'postcss-nesting';
+
+const nesting = postcssNesting();
 
 // functional selector match
 const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)/i;
@@ -15,11 +17,19 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 	: 'extend';
 
 	return (root, result) => {
+		const extendedAtRules = new WeakMap();
+
 		// for each extend at-rule
 		root.walkAtRules(extendMatch, extendAtRule => {
+			let parent = extendAtRule.parent;
+
+			while (parent.parent && parent.parent !== root) {
+				parent = parent.parent;
+			}
+
 			// do not revisit visited extend at-rules
-			if (!extendAtRule.__extendAtRuleVisited) {
-				extendAtRule.__extendAtRuleVisited = true;
+			if (!extendedAtRules.has(extendAtRule)) {
+				extendedAtRules.set(extendAtRule, true);
 
 				// selector identifier
 				const selectorIdMatch = getSelectorIdMatch(extendAtRule.params);
@@ -33,13 +43,11 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 					extendAtRule.replaceWith(extendingRules);
 
 					// transform any nesting at-rules
-					extendingRules.forEach(
-						extendingRule => {
-							transform(extendingRule);
+					const cloneRoot = postcss.root().append(parent.clone());
 
-							extendingRule.walk(transform);
-						}
-					);
+					nesting(cloneRoot);
+
+					parent.replaceWith(cloneRoot);
 				} else {
 					// manage unused extend at-rules
 					const unusedExtendMessage = `Unused extend at-rule "${extendAtRule.params}"`;
@@ -80,14 +88,6 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 		});
 	};
 });
-
-function transform(node) {
-	return nesting()({
-		walk(transformer) {
-			return transformer(node)
-		}
-	});
-}
 
 function getExtendingRules(selectorIdMatch, extendAtRule) {
 	// extending rules
@@ -138,7 +138,7 @@ function getSelectorIdMatch(selectorIds) {
 	).join('|');
 
 	// selector unattached to an existing selector
-	const selectorIdMatch = new RegExp(`(^|[^\\w-]!\.!\#)(${escapedSelectorIds})([^\\w-]|$)`, '');
+	const selectorIdMatch = new RegExp(`(^|[^\\w-]!.!#)(${escapedSelectorIds})([^\\w-]|$)`, '');
 
 	return selectorIdMatch;
 }

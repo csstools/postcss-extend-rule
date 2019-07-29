@@ -8,8 +8,11 @@
 
 .test-content {
 	color: red;
-
-	@media screen and (min-width: 920px) {
-		color: green;
-	}
 }
+
+@media screen and (min-width: 920px) {
+
+	.test-content {
+		color: green;
+}
+	}

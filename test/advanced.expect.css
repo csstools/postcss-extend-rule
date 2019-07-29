@@ -1,20 +1,24 @@
 .serious-modal {
 	font-style: normal;
-	font-weight: bold;
+	font-weight: bold
 }
 
 @media (max-width: 240px) {
 
-	.serious-modal:not(:focus) {
-		outline: none;
+.serious-modal:not(:focus) {
+			outline: none
+}
 	}
+
+.modal {
+	border: thick dotted red
 }
 
 .modal {
-	border: thick dotted red;
-	color: red;
+
+	color: red
 }
 
 .modal:hover:not(:focus) {
-	outline: none;
-}
+			outline: none;
+		}
