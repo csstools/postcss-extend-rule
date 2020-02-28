@@ -18,6 +18,7 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 
 	return (root, result) => {
 		const extendedAtRules = new WeakMap();
+		const nestings = [];		
 
 		// for each extend at-rule
 		root.walkAtRules(extendMatch, extendAtRule => {
@@ -47,7 +48,7 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 
 					nesting(cloneRoot);
 
-					parent.replaceWith(cloneRoot);
+					nestings.unshift([parent, cloneRoot]);
 				} else {
 					// manage unused extend at-rules
 					const unusedExtendMessage = `Unused extend at-rule "${extendAtRule.params}"`;
@@ -61,7 +62,7 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 					}
 				}
 			} else {
-				// manage revisited extend at-rules
+				// manage revisited @extend at-rules
 				const revisitedExtendMessage = `Revisited extend at-rule "${extendAtRule.params}"`;
 
 				if (opts.onRecursiveExtend === 'throw') {
@@ -73,6 +74,8 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 				}
 			}
 		});
+
+		nestings.forEach(([parent, cloneRoot]) => parent.replaceWith(cloneRoot));
 
 		root.walkRules(functionalSelectorMatch, functionalRule => {
 			// manage encountered functional selectors

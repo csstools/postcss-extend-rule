@@ -1,0 +1,29 @@
+body {
+    --color: brown;
+}
+
+body {
+    --border-color: gray;
+}
+
+body {
+    margin: 10px;
+    padding: 12px;
+}
+
+div {
+    --color: brown;
+}
+
+div {
+    --border-color: gray;
+}
+
+div {
+    --background-color: blue;
+}
+
+div {
+    margin: 4px;
+    padding: 6px;
+}

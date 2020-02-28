@@ -3,6 +3,9 @@ const postcssNesting = require('postcss-nesting');
 const postcssExtends = require('.');
 
 module.exports = {
+		'multiple-extends': {
+			message: 'supports multiple @extends within the same rule'
+		},
 		'basic': {
 			message: 'supports @extend usage'
 		},
