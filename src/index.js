@@ -1,13 +1,10 @@
-import postcss from 'postcss';
-import postcssNesting from 'postcss-nesting';
-
-const nesting = postcssNesting();
+import nesting from 'postcss-nesting';
 
 // functional selector match
 const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)/i;
 
 // plugin
-export default postcss.plugin('postcss-extend-rule', rawopts => {
+module.exports = (rawopts) => {
 	// options ( onFunctionalSelector, onRecursiveExtend, onUnusedExtend)
 	const opts = Object(rawopts);
 	const extendMatch = opts.name instanceof RegExp
@@ -16,78 +13,84 @@ export default postcss.plugin('postcss-extend-rule', rawopts => {
 		? new RegExp(`^${opts.name}$`, 'i')
 	: 'extend';
 
-	return (root, result) => {
-		const extendedAtRules = new WeakMap();
+	return {
+		postcssPlugin: 'postcss-extend-rule',
+		OnceExit(root, { postcss, result }) {
+			const extendedAtRules = new WeakMap();
 
-		// for each extend at-rule
-		root.walkAtRules(extendMatch, extendAtRule => {
-			let parent = extendAtRule.parent;
+			// for each extend at-rule
+			root.walkAtRules(extendMatch, extendAtRule => {
+				let parent = extendAtRule.parent;
 
-			while (parent.parent && parent.parent !== root) {
-				parent = parent.parent;
-			}
+				while (parent.parent && parent.parent !== root) {
+					parent = parent.parent;
+				}
 
-			// do not revisit visited extend at-rules
-			if (!extendedAtRules.has(extendAtRule)) {
-				extendedAtRules.set(extendAtRule, true);
+				// do not revisit visited extend at-rules
+				if (!extendedAtRules.has(extendAtRule)) {
+					extendedAtRules.set(extendAtRule, true);
 
-				// selector identifier
-				const selectorIdMatch = getSelectorIdMatch(extendAtRule.params);
+					// selector identifier
+					const selectorIdMatch = getSelectorIdMatch(extendAtRule.params, postcss);
 
-				// extending rules
-				const extendingRules = getExtendingRules(selectorIdMatch, extendAtRule);
+					// extending rules
+					const extendingRules = getExtendingRules(selectorIdMatch, extendAtRule);
 
-				// if there are extending rules
-				if (extendingRules.length) {
-					// replace the extend at-rule with the extending rules
-					extendAtRule.replaceWith(extendingRules);
+					// if there are extending rules
+					if (extendingRules.length) {
+						// replace the extend at-rule with the extending rules
+						extendAtRule.replaceWith(extendingRules);
 
-					// transform any nesting at-rules
-					const cloneRoot = postcss.root().append(parent.clone());
+						// transform any nesting at-rules
+						const cloneRoot = postcss.root().append(parent.clone());
 
-					nesting(cloneRoot);
+						// apply nesting (sync)
+						postcss([nesting({ noIsPseudoSelector: true })])
+							.process(cloneRoot)
+							.sync();
 
-					parent.replaceWith(cloneRoot);
+						parent.replaceWith(cloneRoot);
+					} else {
+						// manage unused extend at-rules
+						const unusedExtendMessage = `Unused extend at-rule "${extendAtRule.params}"`;
+
+						if (opts.onUnusedExtend === 'throw') {
+							throw extendAtRule.error(unusedExtendMessage, { word: extendAtRule.name });
+						} else if (opts.onUnusedExtend === 'warn') {
+							extendAtRule.warn(result, unusedExtendMessage);
+						} else if (opts.onUnusedExtend !== 'ignore') {
+							extendAtRule.remove();
+						}
+					}
 				} else {
-					// manage unused extend at-rules
-					const unusedExtendMessage = `Unused extend at-rule "${extendAtRule.params}"`;
+					// manage revisited extend at-rules
+					const revisitedExtendMessage = `Revisited extend at-rule "${extendAtRule.params}"`;
 
-					if (opts.onUnusedExtend === 'throw') {
-						throw extendAtRule.error(unusedExtendMessage, { word: extendAtRule.name });
-					} else if (opts.onUnusedExtend === 'warn') {
-						extendAtRule.warn(result, unusedExtendMessage);
-					} else if (opts.onUnusedExtend !== 'ignore') {
+					if (opts.onRecursiveExtend === 'throw') {
+						throw extendAtRule.error(revisitedExtendMessage, { word: extendAtRule.name });
+					} else if (opts.onRecursiveExtend === 'warn') {
+						extendAtRule.warn(result, revisitedExtendMessage);
+					} else if (opts.onRecursiveExtend !== 'ignore') {
 						extendAtRule.remove();
 					}
 				}
-			} else {
-				// manage revisited extend at-rules
-				const revisitedExtendMessage = `Revisited extend at-rule "${extendAtRule.params}"`;
+			});
 
-				if (opts.onRecursiveExtend === 'throw') {
-					throw extendAtRule.error(revisitedExtendMessage, { word: extendAtRule.name });
-				} else if (opts.onRecursiveExtend === 'warn') {
-					extendAtRule.warn(result, revisitedExtendMessage);
-				} else if (opts.onRecursiveExtend !== 'ignore') {
-					extendAtRule.remove();
+			root.walkRules(functionalSelectorMatch, functionalRule => {
+				// manage encountered functional selectors
+				const functionalSelectorMessage = `Encountered functional selector "${functionalRule.selector}"`;
+
+				if (opts.onFunctionalSelector === 'throw') {
+					throw functionalRule.error(functionalSelectorMessage, { word: functionalRule.selector.match(functionalSelectorMatch)[1] });
+				} else if (opts.onFunctionalSelector === 'warn') {
+					functionalRule.warn(result, functionalSelectorMessage);
+				} else if (opts.onFunctionalSelector !== 'ignore') {
+					functionalRule.remove();
 				}
-			}
-		});
-
-		root.walkRules(functionalSelectorMatch, functionalRule => {
-			// manage encountered functional selectors
-			const functionalSelectorMessage = `Encountered functional selector "${functionalRule.selector}"`;
-
-			if (opts.onFunctionalSelector === 'throw') {
-				throw functionalRule.error(functionalSelectorMessage, { word: functionalRule.selector.match(functionalSelectorMatch)[1] });
-			} else if (opts.onFunctionalSelector === 'warn') {
-				functionalRule.warn(result, functionalSelectorMessage);
-			} else if (opts.onFunctionalSelector !== 'ignore') {
-				functionalRule.remove();
-			}
-		});
+			});
+		}
 	};
-});
+};
 
 function getExtendingRules(selectorIdMatch, extendAtRule) {
 	// extending rules
@@ -110,7 +113,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 			name: 'nest',
 			params: nestingSelectors,
 			nodes: nestingNodes,
-			// empty the extending rules, as they are likely non-comforming
+			// empty the extending rules, as they are likely non-conforming
 			raws: {}
 		});
 
@@ -131,14 +134,14 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 	return extendingRules;
 }
 
-function getSelectorIdMatch(selectorIds) {
+function getSelectorIdMatch(selectorIds, postcss) {
 	// escape the contents of the selector id to avoid being parsed as regex
 	const escapedSelectorIds = postcss.list.comma(selectorIds).map(
 		selectorId => selectorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 	).join('|');
 
 	// selector unattached to an existing selector
-	const selectorIdMatch = new RegExp(`(^|[^\\w-]!.!#)(${escapedSelectorIds})([^\\w-]|$)`, '');
-
-	return selectorIdMatch;
+	return new RegExp(`(^|[^\\w-]!.!#)(${escapedSelectorIds})([^\\w-]|$)`, '');
 }
+
+module.exports.postcss = true;
