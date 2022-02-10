@@ -9,9 +9,9 @@ const postcssExtendRule = (rawopts) => {
 	const opts = Object(rawopts);
 	const extendMatch = opts.name instanceof RegExp
 		? opts.name
-	: 'name' in opts
-		? new RegExp(`^${opts.name}$`, 'i')
-	: 'extend';
+		: 'name' in opts
+			? new RegExp(`^${opts.name}$`, 'i')
+			: 'extend';
 
 	return {
 		postcssPlugin: 'postcss-extend-rule',
@@ -88,7 +88,7 @@ const postcssExtendRule = (rawopts) => {
 					functionalRule.remove();
 				}
 			});
-		}
+		},
 	};
 };
 
@@ -100,9 +100,9 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 	extendAtRule.root().walkRules(selectorIdMatch, matchingRule => {
 		// nesting selectors for the selectors matching the selector identifier
 		const nestingSelectors = matchingRule.selectors.filter(
-			selector => selectorIdMatch.test(selector)
+			selector => selectorIdMatch.test(selector),
 		).map(
-			selector => selector.replace(selectorIdMatch, '$1&$3')
+			selector => selector.replace(selectorIdMatch, '$1&$3'),
 		).join(',');
 
 		// matching rule’s cloned nodes
@@ -114,7 +114,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 			params: nestingSelectors,
 			nodes: nestingNodes,
 			// empty the extending rules, as they are likely non-conforming
-			raws: {}
+			raws: {},
 		});
 
 		// preserve nesting of parent rules and at-rules
@@ -137,7 +137,7 @@ function getExtendingRules(selectorIdMatch, extendAtRule) {
 function getSelectorIdMatch(selectorIds, postcss) {
 	// escape the contents of the selector id to avoid being parsed as regex
 	const escapedSelectorIds = postcss.list.comma(selectorIds).map(
-		selectorId => selectorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+		selectorId => selectorId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
 	).join('|');
 
 	// selector unattached to an existing selector
