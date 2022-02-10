@@ -4,61 +4,90 @@
   "description": "Use the @extend at-rule and functional selectors in CSS",
   "author": "Jonathan Neal <jonathantneal@hotmail.com>",
   "license": "CC0-1.0",
-  "repository": "csstools/postcss-extend-rule",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/csstools/postcss-extend-rule.git"
+  },
   "homepage": "https://github.com/csstools/postcss-extend-rule#readme",
   "bugs": "https://github.com/csstools/postcss-extend-rule/issues",
-  "main": "index.js",
-  "module": "index.mjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.mjs"
+    }
+  },
   "files": [
-    "index.js",
-    "index.js.map",
-    "index.mjs",
-    "index.mjs.map"
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "README.md",
+    "dist"
   ],
   "scripts": {
     "build": "rollup --config .rollup.js --silent",
-    "prepublishOnly": "npm test",
-    "pretest:tape": "npm run build",
-    "test": "npm run test:js && npm run test:tape",
-    "test:js": "eslint src/{*,**/*}.js --cache --ignore-path .gitignore --quiet",
+    "clean": "node -e \"fs.rmSync('./dist', { recursive: true, force: true });\"",
+    "prepublishOnly": "npm run clean && npm run build && npm run test",
+    "test": "npm run lint && npm run test:tape",
+    "lint": "eslint src/{*,**/*}.js --cache --ignore-path .gitignore --quiet",
     "test:tape": "postcss-tape"
   },
   "engines": {
     "node": "^12 || ^14 || >=16"
   },
   "dependencies": {
-    "postcss-nesting": "^10.1.2",
-    "postcss-tape": "^6.0.1"
+    "postcss-nesting": "^10.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.12",
+    "@babel/core": "^7.17.2",
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@babel/eslint-parser": "^7.16.5",
     "eslint": "^8.8.0",
-    "postcss": "^8.4.5",
-    "pre-commit": "^1.2.2",
-    "rollup": "^2.66.1",
+    "postcss": "^8.4.6",
+    "postcss-tape": "^6.0.1",
+    "rollup": "^2.67.2",
     "rollup-plugin-babel": "^4.4.0"
   },
   "peerDependencies": {
-    "postcss": "^8.4.5"
+    "postcss": "^8.4.6"
   },
   "postcssConfig": {
     "config": ".tape.js"
   },
   "eslintConfig": {
     "env": {
-      "browser": true,
       "es6": true,
       "node": true
     },
     "extends": "eslint:recommended",
-    "parser": "@babel/eslint-parser",
+    "rules": {
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "curly": "error",
+      "brace-style": "error",
+      "indent": [
+        "error",
+        "tab",
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "radix": "error"
+    },
     "parserOptions": {
-      "ecmaVersion": 2018,
-      "impliedStrict": true,
-      "sourceType": "module",
-      "requireConfigFile": false
+      "ecmaVersion": 2020,
+      "sourceType": "module"
     },
     "root": true
   },

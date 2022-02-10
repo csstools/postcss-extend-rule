@@ -1,6 +1,6 @@
 const postcss = require('postcss');
 const postcssNesting = require('postcss-nesting');
-const postcssExtends = require('.');
+const postcssExtends = require('./dist');
 
 module.exports = {
 	'basic': {
