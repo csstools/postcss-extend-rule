@@ -60,7 +60,7 @@
 Add [PostCSS Extend Rule] to your project:
 
 ```bash
-npm install postcss-extend-rule --save-dev
+npm install postcss postcss-extend-rule --save-dev
 ```
 
 Use **PostCSS Extend Rule** to process your CSS:
