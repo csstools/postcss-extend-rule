@@ -1,6 +1,6 @@
 {
   "name": "postcss-extend-rule",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Use the @extend at-rule and functional selectors in CSS",
   "author": "Jonathan Neal <jonathantneal@hotmail.com>",
   "license": "CC0-1.0",
