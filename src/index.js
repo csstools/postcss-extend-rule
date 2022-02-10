@@ -4,7 +4,7 @@ import nesting from 'postcss-nesting';
 const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)/i;
 
 // plugin
-module.exports = (rawopts) => {
+const postcssExtendRule = (rawopts) => {
 	// options ( onFunctionalSelector, onRecursiveExtend, onUnusedExtend)
 	const opts = Object(rawopts);
 	const extendMatch = opts.name instanceof RegExp
@@ -144,4 +144,6 @@ function getSelectorIdMatch(selectorIds, postcss) {
 	return new RegExp(`(^|[^\\w-]!.!#)(${escapedSelectorIds})([^\\w-]|$)`, '');
 }
 
-module.exports.postcss = true;
+postcssExtendRule.postcss = true;
+
+export default postcssExtendRule;
