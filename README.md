@@ -1,7 +1,7 @@
 # PostCSS Extend Rule [<img src="https://postcss.github.io/postcss/logo.svg" alt="PostCSS" width="90" height="90" align="right">][postcss]
 
 [![NPM Version][npm-img]][npm-url]
-[![Build Status][cli-img]][cli-url]
+[![test](https://github.com/csstools/postcss-extend-rule/actions/workflows/test.yml/badge.svg)](https://github.com/csstools/postcss-extend-rule/actions/workflows/test.yml)
 [<img alt="Discord" src="https://shields.io/badge/Discord-5865F2?logo=discord&logoColor=white">][discord]
 
 [PostCSS Extend Rule] lets you use the `@extend` at-rule and
@@ -165,8 +165,6 @@ main {
 }
 ```
 
-[cli-img]: https://img.shields.io/travis/csstools/postcss-extend-rule/master.svg
-[cli-url]: https://travis-ci.org/csstools/postcss-extend-rule
 [git-img]: https://img.shields.io/badge/support-chat-blue.svg
 [discord]: https://discord.gg/bUadyRwkJS
 [npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
