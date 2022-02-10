@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-img]][npm-url]
 [![Build Status][cli-img]][cli-url]
-[![Support Chat][git-img]][git-url]
+[<img alt="Discord" src="https://shields.io/badge/Discord-5865F2?logo=discord&logoColor=white">][discord]
 
 [PostCSS Extend Rule] lets you use the `@extend` at-rule and
 [Functional Selectors] in CSS, following the speculative
@@ -168,7 +168,7 @@ main {
 [cli-img]: https://img.shields.io/travis/csstools/postcss-extend-rule/master.svg
 [cli-url]: https://travis-ci.org/csstools/postcss-extend-rule
 [git-img]: https://img.shields.io/badge/support-chat-blue.svg
-[git-url]: https://gitter.im/postcss/postcss
+[discord]: https://discord.gg/bUadyRwkJS
 [npm-img]: https://img.shields.io/npm/v/postcss-extend-rule.svg
 [npm-url]: https://www.npmjs.com/package/postcss-extend-rule
 
