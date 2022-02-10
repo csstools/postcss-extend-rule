@@ -1,6 +1,7 @@
 .*
 !.editorconfig
 !.gitignore
+!.github
 !.rollup.js
 !.tape.js
 !.travis.yml
