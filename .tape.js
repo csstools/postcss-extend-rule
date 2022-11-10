@@ -1,10 +1,10 @@
-const postcss = require('postcss');
-const postcssNesting = require('postcss-nesting');
-const postcssExtends = require('./dist/index.cjs');
+const postcss = require("postcss");
+const postcssNesting = require("postcss-nesting");
+const postcssExtends = require("./dist/index.cjs");
 
 module.exports = {
-	'basic': {
-		message: 'supports @extend usage'
+	basic: {
+		message: "supports @extend usage",
 	},
 	'basic:name': {
 		message: 'ignores @extend usage when { name: "postcss-extend" }',
@@ -78,5 +78,12 @@ module.exports = {
 		error: {
 			reason: 'Encountered functional selector "%test-placeholder"'
 		}
-	}
+	},
+	"source-from": {
+		message: "supports @extend usage with source-from option configured",
+		options: {
+			sourceFrom: ["./test/assets/**/*.css"],
+		},
+		expect: "source-from.expect.css",
+	},
 };

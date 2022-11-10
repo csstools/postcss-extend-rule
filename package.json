@@ -37,6 +37,7 @@
     "node": "^12 || ^14 || >=16"
   },
   "dependencies": {
+    "glob": "^8.0.3",
     "postcss-nesting": "^10.1.2"
   },
   "devDependencies": {
