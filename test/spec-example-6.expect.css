@@ -1,0 +1,17 @@
+.media-block {
+	overflow: auto;
+}
+
+.media-block > img {
+	float: left;
+}
+
+.image-post {
+	overflow: auto;
+}
+
+.image-post > img {
+	float: left;
+}
+
+/* additional styles to tweak the display */

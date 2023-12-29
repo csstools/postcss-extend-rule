@@ -1,13 +1,4 @@
-.*
-!.editorconfig
-!.gitignore
-!.github
-!.rollup.js
-!.tape.js
-!.travis.yml
+.eslintcache
 *.log*
 *.result.css
-/index.*
 node_modules
-package-lock.json
-dist

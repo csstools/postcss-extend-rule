@@ -1,0 +1,13 @@
+.error {
+	color: red;
+	border: thick dotted red;
+}
+
+.serious-error {
+	color: red;
+	border: thick dotted red;
+}
+
+.serious-error {
+	font-weight: bold;
+}

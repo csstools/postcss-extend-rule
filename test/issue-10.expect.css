@@ -1,0 +1,7 @@
+.baz {
+	right: 0;
+}
+
+.baz {
+	@extend %bar;
+}

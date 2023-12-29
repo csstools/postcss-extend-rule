@@ -1,0 +1,9 @@
+.error {
+	color: red;
+	border: thick dotted red;
+}
+
+.serious-error {
+	@extend .error;
+	font-weight: bold;
+}

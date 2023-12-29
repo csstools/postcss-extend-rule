@@ -7,11 +7,13 @@ const functionalSelectorMatch = /(^|[^\w-])(%[_a-zA-Z]+[_a-zA-Z0-9-]*)([^\w-]|$)
 const postcssExtendRule = (rawopts) => {
 	// options ( onFunctionalSelector, onRecursiveExtend, onUnusedExtend)
 	const opts = Object(rawopts);
-	const extendMatch = opts.name instanceof RegExp
-		? opts.name
-		: 'name' in opts
-			? new RegExp(`^${opts.name}$`, 'i')
-			: 'extend';
+
+	let extendMatch = /^extend$/i;
+	if (opts.name instanceof RegExp) {
+		extendMatch = opts.name;
+	} else if ('name' in opts) {
+		extendMatch = new RegExp(`^${opts.name}$`, 'i');
+	}
 
 	return {
 		postcssPlugin: 'postcss-extend-rule',

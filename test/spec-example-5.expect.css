@@ -1,0 +1,26 @@
+.error {
+	color: red;
+}
+
+.serious-error {
+	color: red;
+}
+
+.serious-error {
+
+	font-weight: bold;
+}
+
+.super-serious-error {
+	color: red;
+}
+
+.super-serious-error {
+
+	font-weight: bold;
+}
+
+.super-serious-error {
+
+	animation: flashing 1s infinite;
+}

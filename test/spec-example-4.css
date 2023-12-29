@@ -1,0 +1,19 @@
+button {
+	color: green;
+}
+
+.my-button {
+	@extend button;
+}
+
+.other-button {
+	color: orange;
+}
+
+.other-button:active {
+	color: purple;
+}
+
+.perma-pressed-button {
+	@extend .other-button:active;
+}

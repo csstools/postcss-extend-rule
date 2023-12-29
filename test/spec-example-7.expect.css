@@ -1,0 +1,7 @@
+.image-post {
+	overflow: auto;
+}
+
+.image-post>img {
+	float: left;
+}

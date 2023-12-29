@@ -1,0 +1,7 @@
+.test {
+	display: none;
+}
+
+.thing:before {
+	@extend .test;
+}

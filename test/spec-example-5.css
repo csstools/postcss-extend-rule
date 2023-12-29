@@ -1,0 +1,15 @@
+.error {
+	color: red;
+}
+
+.serious-error {
+	@extend .error;
+
+	font-weight: bold;
+}
+
+.super-serious-error {
+	@extend .serious-error;
+
+	animation: flashing 1s infinite;
+}

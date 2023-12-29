@@ -1,0 +1,11 @@
+%media-block {
+	overflow: auto;
+}
+
+%media-block>img {
+	float: left;
+}
+
+.image-post {
+	@extend %media-block;
+}

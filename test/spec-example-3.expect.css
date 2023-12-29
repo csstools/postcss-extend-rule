@@ -1,0 +1,23 @@
+.error {
+	color: red;
+}
+
+@media (width > 600px) {
+	.serious-error {
+	color: red;
+	}
+
+@media (width > 600px) {
+	.serious-error {
+		width: 100%;
+	}
+}
+	.serious-error {
+
+		font-weight: bold;
+	}
+
+	.error {
+		width: 100%;
+	}
+}

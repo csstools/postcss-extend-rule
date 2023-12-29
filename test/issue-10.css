@@ -1,0 +1,12 @@
+%foo {
+	right: 0;
+}
+
+%bar {
+	left: 0;
+}
+
+.baz {
+	@extend %foo;
+	@extend %bar;
+}
