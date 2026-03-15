@@ -44,9 +44,9 @@
     "@babel/core": "^7.17.2",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@csstools/postcss-global-data": "^2.1.1",
-    "@csstools/postcss-tape": "^4.1.1",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@csstools/postcss-global-data": "^4.0.0",
+    "@csstools/postcss-tape": "^7.0.0",
+    "@rollup/plugin-babel": "^7.0.0",
     "eslint": "^8.8.0",
     "postcss": "^8.4.6",
     "rollup": "^4.9.1"
